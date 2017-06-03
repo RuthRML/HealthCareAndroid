@@ -1,5 +1,3 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="minHeight">50dp</dimen>
-    <dimen name="minWidth">50dp</dimen>
 </resources>
