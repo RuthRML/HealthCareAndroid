@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class DetallesEspecialista extends AppCompatActivity {
 
@@ -62,8 +63,8 @@ public class DetallesEspecialista extends AppCompatActivity {
                 spinnerSexoC.setSelection(1);
             }
 
-            txtEmailC.setText(bundle.getString("email"));
             txtTelefonoC.setText(bundle.getString("telefono"));
+            txtEmailC.setText(bundle.getString("email"));
             txtEspecialidadC.setText(bundle.getString("especialidad"));
             txtConsultaC.setText(bundle.getString("consulta"));
             txtEdificioC.setText(bundle.getString("edificio"));
@@ -77,17 +78,23 @@ public class DetallesEspecialista extends AppCompatActivity {
 
                     conectorBD.abrir();
 
+                    Toast.makeText(getBaseContext(), "Se ha añadido un nuevo especialista. Pulsar recargar para ver los cambios" , Toast.LENGTH_LONG).show();
+
                     if (checkOperarC.isChecked() == false){
                         conectorBD.insertarEspecialista(txtNombreC.getText().toString(),
-                                txtApellidosC.getText().toString(), txtEmailC.getText().toString(),
-                                txtTelefonoC.getText().toString(), txtEspecialidadC.getText().toString(),
-                                spinnerSexoC.getSelectedItem().toString(), txtConsultaC.getText().toString(),
+                                txtApellidosC.getText().toString(), txtDniC.getText().toString(),
+                                txtEmailC.getText().toString(), txtTelefonoC.getText().toString(),
+                                txtEspecialidadC.getText().toString(),
+                                spinnerSexoC.getSelectedItem().toString().charAt(0) + "",
+                                txtConsultaC.getText().toString(),
                                 txtEdificioC.getText().toString(), 0);
                     }else{
                         conectorBD.insertarEspecialista(txtNombreC.getText().toString(),
-                                txtApellidosC.getText().toString(), txtEmailC.getText().toString(),
-                                txtTelefonoC.getText().toString(), txtEspecialidadC.getText().toString(),
-                                spinnerSexoC.getSelectedItem().toString(), txtConsultaC.getText().toString(),
+                                txtApellidosC.getText().toString(), txtDniC.getText().toString(),
+                                txtEmailC.getText().toString(), txtTelefonoC.getText().toString(),
+                                txtEspecialidadC.getText().toString(),
+                                spinnerSexoC.getSelectedItem().toString().charAt(0) + "",
+                                txtConsultaC.getText().toString(),
                                 txtEdificioC.getText().toString(), 1);
                     }
 

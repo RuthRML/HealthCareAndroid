@@ -33,9 +33,9 @@ public class ConectorBD {
         }
     }
 
-    public void insertarEspecialista(String nombre, String apellidos, String email, String telefono, String especialidad, String sexo, String consulta, String edificio, int operar)
+    public void insertarEspecialista(String nombre, String apellidos, String dni, String email, String telefono, String especialidad, String sexo, String consulta, String edificio, int operar)
     {
-        String consultaSQL = "INSERT INTO Especialistas VALUES('"+nombre+"', '"+apellidos+"', '"+email+"', '"+telefono+"', '"+especialidad+"', '"+sexo+"', '"+consulta+"', '"+edificio+"', '"+operar+"')";
+        String consultaSQL = "INSERT INTO Especialistas VALUES('"+nombre+"', '"+apellidos+"', '"+dni+"', '"+email+"', '"+telefono+"', '"+especialidad+"', '"+sexo+"', '"+consulta+"', '"+edificio+"', '"+operar+"')";
         db.execSQL(consultaSQL);
     }
 
@@ -45,8 +45,7 @@ public class ConectorBD {
     }
 
     public void eliminarEspecialista (String dni){
-        String consultaSQL = "DELETE FROM Especialistas WHERE dni='"+dni+"'";
-        db.execSQL(consultaSQL);
+        db.delete("Especialistas", "dni" + "=" + dni, null);
 
     }
 

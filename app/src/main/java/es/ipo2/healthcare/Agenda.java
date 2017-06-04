@@ -19,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,10 @@ public class Agenda extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         especialistas = new ArrayList<Especialista>();
+
+        especialistas.add(new Especialista("Para_cargar_pulsar_recargar", "Rodríguez", "05719475G", "mariarodriguez@correo.com", "926587896", "Muestra 1", "m", "Consulta 2", "Edificio 1", true));
+        especialistas.add(new Especialista("María", "Rodríguez Sáenz", "06576469F", "mariarodriguez@correo.com", "926587896", "Muestra 2", "m", "Consulta 2", "Edificio 1", true));
+        especialistas.add(new Especialista("Carlos", "López", "05496214P", "carloslopez@correo.com", "926357479", "Muestra 3", "h", "Consulta 2", "Edificio 1", false));
 
         lstEspecialistas = (ListView)findViewById(R.id.lstEspecialistas);
         adaptador = new AdaptadorLista(this, especialistas);
@@ -94,13 +99,14 @@ public class Agenda extends AppCompatActivity {
                         Especialista especialista = new Especialista (null, null, null, null, null, null, "m", null, null, false);
                         especialista.setNombre(c.getString(0));
                         especialista.setApellidos(c.getString(1));
-                        especialista.setEmail(c.getString(2));
-                        especialista.setTelefono(c.getString(3));
-                        especialista.setEspecialidad(c.getString(4));
-                        especialista.setSexo(c.getString(5));
-                        especialista.setConsulta(c.getString(6));
-                        especialista.setEdificio(c.getString(7));
-                        if (c.getInt(8) == 0){
+                        especialista.setDni(c.getString(2));
+                        especialista.setEmail(c.getString(3));
+                        especialista.setTelefono(c.getString(4));
+                        especialista.setEspecialidad(c.getString(5));
+                        especialista.setSexo(c.getString(6));
+                        especialista.setConsulta(c.getString(7));
+                        especialista.setEdificio(c.getString(8));
+                        if (c.getInt(9) == 0){
                             especialista.setOperar(false);
                         }else{
                             especialista.setOperar(true);
@@ -138,6 +144,7 @@ public class Agenda extends AppCompatActivity {
 
     public boolean onContextItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+
             case R.id.verDetalles:
                 Intent i = new Intent(this, DetallesEspecialista.class);
                 i.putExtra("modo", "detalles");
