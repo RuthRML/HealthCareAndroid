@@ -46,10 +46,10 @@ public class AdaptadorLista extends ArrayAdapter {
         ImageView imageEspecialista = (ImageView)item.findViewById(R.id.imageEspecialista);
 
         switch (especialistas.get(position).getSexo()){
-            case 'h':
+            case "h":
                 imageEspecialista.setImageResource(R.drawable.doctor);
                 break;
-            case 'm':
+            case "m":
                 imageEspecialista.setImageResource(R.drawable.doctora);
         }
 

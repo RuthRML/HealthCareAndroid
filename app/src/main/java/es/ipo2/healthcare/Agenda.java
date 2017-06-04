@@ -2,6 +2,7 @@ package es.ipo2.healthcare;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,11 +24,16 @@ import java.util.ArrayList;
 
 public class Agenda extends AppCompatActivity {
 
-    private String[] especialistasEstatico={"María García","José Pérez","José Ruiz", "Carmen López"};
     private ListView lstEspecialistas;
     private TextView lblSeleccionado;
     private ArrayList<Especialista> especialistas;
+    AdaptadorLista adaptador;
     private int especialistaSeleccionado;
+    private ConectorBD conectorBD;
+
+    private EditText txtNombre;
+    private EditText txtApellidos;
+    private EditText txtEspecialidad;
 
 
     @Override
@@ -35,37 +43,25 @@ public class Agenda extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         especialistas = new ArrayList<Especialista>();
 
-        especialistas.add(new Especialista("María", "Rodríguez1", "mariarodriguez@correo.com", "926587896", "Cardiologíaaa", 'h', "Consulta 2", "Edificio 1", true));
-        especialistas.add(new Especialista("María", "Rodríguez1", "mariarodriguez@correo.com", "926587896", "Cardiologíaaa", 'h', "Consulta 2", "Edificio 1", true));
-        especialistas.add(new Especialista("María", "Rodríguez1", "mariarodriguez@correo.com", "926587896", "Cardiologíaaa", 'h', "Consulta 2", "Edificio 1", false));
-        especialistas.add(new Especialista("María", "Rodríguez1", "mariarodriguez@correo.com", "926587896", "Cardiologíaaa", 'h', "Consulta 2", "Edificio 1", true));
-
-        lstEspecialistas =(ListView)findViewById(R.id.lstEspecialistas);
-        AdaptadorLista adaptador = new AdaptadorLista(this, especialistas);
+        lstEspecialistas = (ListView)findViewById(R.id.lstEspecialistas);
+        adaptador = new AdaptadorLista(this, especialistas);
         lstEspecialistas.setAdapter(adaptador);
 
         lblSeleccionado = (TextView)findViewById(R.id.lblSeleccionado);
         lstEspecialistas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int posicion, long id) {
-                lblSeleccionado.setText("Contacto seleccionado: "+ ((Especialista)lstEspecialistas.getItemAtPosition(posicion)).getNombre());
+                lblSeleccionado.setText("Especialista Seleccionado: " +
+                        ((Especialista)lstEspecialistas.getItemAtPosition(posicion)).getNombre() + " " +
+                        ((Especialista) lstEspecialistas.getItemAtPosition(posicion)).getApellidos());
             }
         });
 
         registerForContextMenu(lstEspecialistas);
 
-
+        conectorBD = new ConectorBD(this);
 
     }
 
@@ -79,6 +75,46 @@ public class Agenda extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.aniadir:
+
+                Intent i = new Intent(this, DetallesEspecialista.class);
+                i.putExtra("modo", "aniadir");
+                startActivity(i);
+
+                break;
+
+            case R.id.recargar:
+                especialistas.removeAll(especialistas);
+                conectorBD.abrir();
+                Cursor c = conectorBD.listarEspecialistas();
+
+                if(c.moveToFirst())
+                {
+                    do {
+                        Especialista especialista = new Especialista (null, null, null, null, null, null, "m", null, null, false);
+                        especialista.setNombre(c.getString(0));
+                        especialista.setApellidos(c.getString(1));
+                        especialista.setEmail(c.getString(2));
+                        especialista.setTelefono(c.getString(3));
+                        especialista.setEspecialidad(c.getString(4));
+                        especialista.setSexo(c.getString(5));
+                        especialista.setConsulta(c.getString(6));
+                        especialista.setEdificio(c.getString(7));
+                        if (c.getInt(8) == 0){
+                            especialista.setOperar(false);
+                        }else{
+                            especialista.setOperar(true);
+                        }
+
+                        especialistas.add(especialista);
+
+                    } while (c.moveToNext());
+                }
+                c.close();
+                conectorBD.cerrar();
+                ((BaseAdapter) lstEspecialistas.getAdapter()).notifyDataSetChanged();
+                break;
+
             case R.id.acercaDe:
                 AlertDialog.Builder builder= new AlertDialog.Builder(this);
                 builder.setTitle("Acerca de...");
@@ -104,8 +140,11 @@ public class Agenda extends AppCompatActivity {
         switch(item.getItemId()) {
             case R.id.verDetalles:
                 Intent i = new Intent(this, DetallesEspecialista.class);
+                i.putExtra("modo", "detalles");
                 i.putExtra("nombre", especialistas.get(especialistaSeleccionado).getNombre());
                 i.putExtra("apellidos", especialistas.get(especialistaSeleccionado).getApellidos());
+                i.putExtra("dni", especialistas.get(especialistaSeleccionado).getDni());
+                i.putExtra("sexo", especialistas.get(especialistaSeleccionado).getSexo());
                 i.putExtra("telefono", especialistas.get(especialistaSeleccionado).getTelefono());
                 i.putExtra("email",especialistas.get(especialistaSeleccionado).getEmail());
                 i.putExtra("especialidad",especialistas.get(especialistaSeleccionado).getEspecialidad());
@@ -113,8 +152,11 @@ public class Agenda extends AppCompatActivity {
                 i.putExtra("edificio",especialistas.get(especialistaSeleccionado).getEdificio());
                 i.putExtra("operar",especialistas.get(especialistaSeleccionado).isOperar());
 
-                //startActivity(i);
-                startActivityForResult(i, 1234);
+                startActivity(i);
+                break;
+
+            case R.id.eliminarEspecialista:
+                conectorBD.eliminarEspecialista(especialistas.get(especialistaSeleccionado).getDni());
                 break;
         }
         return true;

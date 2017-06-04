@@ -4,4 +4,9 @@
         android:id="@+id/verDetalles"
         android:title="@string/menuContextVerDetalles"
         />
+
+    <item
+        android:id="@+id/eliminarEspecialista"
+        android:title="@string/menuContextEliminarEspecialista"
+        />
 </menu>

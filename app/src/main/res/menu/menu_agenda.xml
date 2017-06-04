@@ -3,6 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="es.ipo2.healthcare.Agenda">
 
+    <item
+        android:id="@+id/aniadir"
+        android:icon="@drawable/plus"
+        android:title="@string/menuAniadir"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/recargar"
+        android:icon="@drawable/reload"
+        android:title="@string/menuRecargar"
+        app:showAsAction="always" />
+
     <item android:id="@+id/acercaDe"
         android:title="@string/menuAcercaDe"
         android:icon="@drawable/info"

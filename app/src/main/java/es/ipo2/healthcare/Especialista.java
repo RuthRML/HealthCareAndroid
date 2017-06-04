@@ -8,18 +8,20 @@ public class Especialista {
 
     private String nombre;
     private String apellidos;
+    private String dni;
     private String email;
     private String telefono;
     private String especialidad;
-    private char sexo;
+    private String sexo;
     private String consulta;
     private String edificio;
     private boolean operar;
 
-    public Especialista(String nombre, String apellidos, String email, String telefono,
-                        String especialidad, char sexo, String consulta, String edificio, boolean operar) {
+    public Especialista(String nombre, String apellidos, String dni, String email, String telefono,
+                        String especialidad, String sexo, String consulta, String edificio, boolean operar) {
         this.nombre = nombre;
         this.apellidos = apellidos;
+        this.dni = dni;
         this.email = email;
         this.telefono = telefono;
         this.especialidad = especialidad;
@@ -62,11 +64,11 @@ public class Especialista {
         this.especialidad = especialidad;
     }
 
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
@@ -100,6 +102,14 @@ public class Especialista {
 
     public void setOperar(boolean operar) {
         this.operar = operar;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 
 }
